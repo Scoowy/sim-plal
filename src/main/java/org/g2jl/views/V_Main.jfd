@@ -1,0 +1,29 @@
+JFDML JFormDesigner: "7.0.1.0.272" Java: "11.0.5" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "org.jdesktop.swingx.JXFrame", new FormLayoutManager( class net.miginfocom.swing.MigLayout ) {
+			"$layoutConstraints": "hidemode 3"
+			"$columnConstraints": "[grow, center]"
+			"$rowConstraints": "[grow, center]"
+		} ) {
+			name: "this"
+			"title": "Ventana principal"
+			"resizable": false
+			"defaultCloseOperation": 3
+			"$locationPolicy": 1
+			"$sizePolicy": 1
+			add( new FormComponent( "org.jdesktop.swingx.JXLabel" ) {
+				name: "xLabel1"
+				"text": "Hello World!"
+				"font": new java.awt.Font( "Roboto", 0, 60 )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 0 0"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 105, 95 )
+			"size": new java.awt.Dimension( 800, 600 )
+		} )
+	}
+}
