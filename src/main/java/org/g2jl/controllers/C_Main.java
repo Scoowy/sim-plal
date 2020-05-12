@@ -21,7 +21,9 @@ public class C_Main implements I_Controller {
         if (e.getSource() == view.getBtnMensaje()) {
             System.out.println("Boton pulsado");
             try {
-                this.view.laf.setLookAndFeel(new FlatMaterialPalenightContrastIJTheme());
+                UIManager.setLookAndFeel(new FlatMaterialPalenightContrastIJTheme());
+            } catch (IllegalMonitorStateException ex) {
+                System.err.println(ex.getCause().getMessage());
             } catch (Exception ex) {
                 System.err.println("Error al cargar el tema oscuro");
             }
