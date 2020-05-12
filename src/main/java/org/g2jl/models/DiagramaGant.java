@@ -19,6 +19,9 @@ public class DiagramaGant extends JXPanel {
     private List<CellGant> cells;
     private Dimension dimensionPanel;
 
+    // Padding Left Top Right Bottom
+    private final int[] padds = {20, 20, 20, 20};
+
     public DiagramaGant() {
         setBorder(new TitledBorder(null, "Diagrama de Gant", TitledBorder.LEFT, TitledBorder.TOP));
         setBackground(Color.BLUE);
@@ -32,12 +35,15 @@ public class DiagramaGant extends JXPanel {
 
     public void recalculateDimension() {
         dimensionPanel = getSize();
+        dimensionPanel.width = dimensionPanel.width - padds[2] * 2;
+        dimensionPanel.height = dimensionPanel.height - padds[3] * 2;
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         recalculateDimension();
         String texto = String.format("%d - %d", dimensionPanel.width, dimensionPanel.height);
+        g.drawRect(padds[0], padds[1], dimensionPanel.width, dimensionPanel.height);
         g.drawString(texto, 10, 20);
     }
 }
