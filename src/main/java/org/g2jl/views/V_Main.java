@@ -4,22 +4,21 @@ import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlContra
 import net.miginfocom.swing.MigLayout;
 import org.g2jl.controllers.C_Main;
 import org.g2jl.interfaces.I_View;
-import org.g2jl.models.Pizarra;
+import org.g2jl.models.DiagramaGant;
 import org.jdesktop.swingx.*;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
  * @author Juan Gahona - Scoowy
+ * @version 20.5.12
  */
 public class V_Main extends JXFrame implements I_View {
 
-    private JXPanel pnlCanvas;
+    private DiagramaGant pnlCanvas;
     private JXPanel pnlForm;
     private JXPanel pnlButtons;
 
@@ -76,7 +75,7 @@ public class V_Main extends JXFrame implements I_View {
         return btnIniciar;
     }
 
-    public JXPanel getPnlCanvas() {
+    public DiagramaGant getPnlCanvas() {
         return pnlCanvas;
     }
 
@@ -157,7 +156,7 @@ public class V_Main extends JXFrame implements I_View {
     }
 
     private void initComponents() {
-        pnlCanvas = new JXPanel();
+        pnlCanvas = new DiagramaGant();
         pnlForm = new JXPanel();
         pnlButtons = new JXPanel();
 
@@ -206,22 +205,6 @@ public class V_Main extends JXFrame implements I_View {
                         "[]"));
 
         //======== pnlCanvas ========
-        {
-            pnlCanvas.setBorder(new TitledBorder(null, "Diagrama de Gant", TitledBorder.LEFT, TitledBorder.TOP));
-            pnlCanvas.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-                @Override
-                public void propertyChange(java.beans.PropertyChangeEvent e
-                ) {
-                    if ("bord\u0065r".equals(e.getPropertyName())) throw new RuntimeException();
-                }
-            });
-            pnlCanvas.setLayout(new MigLayout(
-                    "fill,hidemode 3,align center center",
-                    // columns
-                    "[fill]",
-                    // rows
-                    "[fill]"));
-        }
         contentPane.add(pnlCanvas, "pad 15 15 0 -15,north,width 100%:100%:100%,height 40%:40%:40%");
 
         //======== formProcess ========
@@ -398,9 +381,6 @@ public class V_Main extends JXFrame implements I_View {
         contentPane.add(pnlButtons, "pad 0 50% 0 0,south,gapx null 15,gapy null 15");
         setSize(800, 600);
         setLocationRelativeTo(null);
-
-        // TODO: Aqui la pizarra
-//        pnlCanvas.add(new Pizarra(), "width 100%, height 100%");
     }
 
     @Override
