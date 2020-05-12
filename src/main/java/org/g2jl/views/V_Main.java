@@ -50,12 +50,10 @@ public class V_Main extends JXFrame implements I_View {
     private JXButton btnIniciar;
 
     private C_Main controller;
-    public UIManager laf;
 
     public V_Main() {
-        laf = new UIManager();
         try {
-            laf.setLookAndFeel(new FlatLightOwlContrastIJTheme());
+            UIManager.setLookAndFeel(new FlatLightOwlContrastIJTheme());
         } catch (Exception ex) {
             System.err.println("Fallo al cargar el tema.");
         }
@@ -401,7 +399,8 @@ public class V_Main extends JXFrame implements I_View {
         setSize(800, 600);
         setLocationRelativeTo(null);
 
-        pnlCanvas.add(new Pizarra(), "width 100%, height 100%");
+        // TODO: Aqui la pizarra
+//        pnlCanvas.add(new Pizarra(), "width 100%, height 100%");
     }
 
     @Override
