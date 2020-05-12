@@ -7,6 +7,18 @@
     <groupId>org.g2jl</groupId>
     <artifactId>sim-plal</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>6</source>
+                    <target>6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf -->
@@ -20,6 +32,12 @@
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-swingx</artifactId>
+            <version>0.34</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf-intellij-themes -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf-intellij-themes</artifactId>
             <version>0.34</version>
         </dependency>
 
@@ -41,6 +59,13 @@
             <groupId>com.miglayout</groupId>
             <artifactId>miglayout-swing</artifactId>
             <version>5.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.ahome-it/lienzo-core -->
+        <dependency>
+            <groupId>com.ahome-it</groupId>
+            <artifactId>lienzo-core</artifactId>
+            <version>2.0.300-RELEASE</version>
         </dependency>
 
     </dependencies>
