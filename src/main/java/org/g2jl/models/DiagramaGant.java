@@ -1,9 +1,11 @@
 package org.g2jl.models;
 
-
 import org.jdesktop.swingx.JXPanel;
 
 import javax.swing.border.TitledBorder;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,18 +16,28 @@ import java.util.List;
  * @version 20.5.12
  */
 public class DiagramaGant extends JXPanel {
-    List<CellGant> cells;
+    private List<CellGant> cells;
+    private Dimension dimensionPanel;
 
     public DiagramaGant() {
         setBorder(new TitledBorder(null, "Diagrama de Gant", TitledBorder.LEFT, TitledBorder.TOP));
-        addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            @Override
-            public void propertyChange(java.beans.PropertyChangeEvent e
-            ) {
-                if ("bord\u0065r".equals(e.getPropertyName())) throw new RuntimeException();
-            }
-        });
-
+        setBackground(Color.BLUE);
         cells = new ArrayList<CellGant>();
+        dimensionPanel = getSize();
+    }
+
+    public void processListToCellList(List<Process> process) {
+
+    }
+
+    public void recalculateDimension() {
+        dimensionPanel = getSize();
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        recalculateDimension();
+        String texto = String.format("%d - %d", dimensionPanel.width, dimensionPanel.height);
+        g.drawString(texto, 10, 20);
     }
 }
