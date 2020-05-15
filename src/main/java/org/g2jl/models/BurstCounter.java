@@ -2,12 +2,11 @@ package org.g2jl.models;
 
 import java.awt.*;
 
-
 /**
  * Clase que pinta un cuadro con el contador de ráfagas de CPU actuales.
  *
  * @author Juan Gahona
- * @version 20.5.13
+ * @version 20.5.15
  */
 public class BurstCounter {
     private int x;
@@ -17,9 +16,9 @@ public class BurstCounter {
 
     private int burst;
 
-    private final Color strokeColor = Color.BLACK;
-    private final Color backgroundColor = Color.WHITE;
-    private final Color textColor = Color.DARK_GRAY;
+    private final Color STROKE_COLOR = Color.BLACK;
+    private final Color BACKGROUND_COLOR = Color.WHITE;
+    private final Color TEXT_COLOR = Color.DARK_GRAY;
 
     private Font fuente;
     private Dimension pointFont;
@@ -84,13 +83,13 @@ public class BurstCounter {
     public void paintCounter(Graphics g) {
         String texto = changeFontMetrics(g);
 
-        g.setColor(backgroundColor);
+        g.setColor(BACKGROUND_COLOR);
         g.fillRect(x, y, w, h);
-        g.setColor(strokeColor);
+        g.setColor(STROKE_COLOR);
         g.drawRect(x, y, w, h);
 
         g.setFont(fuente);
-        g.setColor(this.textColor);
+        g.setColor(this.TEXT_COLOR);
         g.drawString(texto, pointFont.width, pointFont.height);
     }
 }
