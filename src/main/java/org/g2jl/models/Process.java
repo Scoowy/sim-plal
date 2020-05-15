@@ -4,76 +4,56 @@ package org.g2jl.models;
  * Clase <b>Process</b> que ejemplifica un proceso de cpu a ejecutar.
  *
  * @author Juan Gahona
- * @version 20.5.10
+ * @version 20.5.15
  */
 public class Process {
-    private String id;
-    private String name;
-    private int arrivalTime;
-    private int cpuTime;
-    private int priority;
+    private final int ID;
+    private final String NAME;
+    private final int ARRIVAL_TIME;
+    private final int CPU_TIME;
+    private final int PRIORITY;
 
     private int waitTime;
     private int returnTime;
+    private int burstNum;
 
     /**
      * Constructor de clase
      *
-     * @param id          identificador unico del proceso
-     * @param name        nombre del proceso
-     * @param arrivalTime tiempo de llegada del proceso
-     * @param cpuTime     nro de rafagas de CPU que debe realizar
-     * @param priority    prioridad con la cual debe ejecutarse
+     * @param ID           identificador unico del proceso
+     * @param NAME         nombre del proceso
+     * @param ARRIVAL_TIME tiempo de llegada del proceso
+     * @param CPU_TIME     nro de rafagas de CPU que debe realizar
+     * @param PRIORITY     prioridad con la cual debe ejecutarse
      */
-    public Process(String id, String name, int arrivalTime, int cpuTime, int priority) {
-        this.id = id;
-        this.name = name;
-        this.arrivalTime = arrivalTime;
-        this.cpuTime = cpuTime;
-        this.priority = priority;
+    public Process(int ID, String NAME, int ARRIVAL_TIME, int CPU_TIME, int PRIORITY) {
+        this.ID = ID;
+        this.NAME = NAME;
+        this.ARRIVAL_TIME = ARRIVAL_TIME;
+        this.CPU_TIME = CPU_TIME;
+        this.PRIORITY = PRIORITY;
 
         this.waitTime = 0;
         this.returnTime = 0;
+        this.burstNum = 0;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    public int getId() { return ID; }
 
     public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return NAME;
     }
 
     public int getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public void setArrivalTime(int arrivalTime) {
-        this.arrivalTime = arrivalTime;
+        return ARRIVAL_TIME;
     }
 
     public int getCpuTime() {
-        return cpuTime;
-    }
-
-    public void setCpuTime(int cpuTime) {
-        this.cpuTime = cpuTime;
+        return CPU_TIME;
     }
 
     public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
+        return PRIORITY;
     }
 
     public int getWaitTime() {
@@ -91,4 +71,8 @@ public class Process {
     public void setReturnTime(int returnTime) {
         this.returnTime = returnTime;
     }
+
+    public int getBurstNum() { return burstNum; }
+
+    public void setBurstNum(int burstNum) { this.burstNum = burstNum; }
 }

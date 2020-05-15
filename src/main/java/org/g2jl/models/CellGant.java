@@ -6,97 +6,57 @@ import java.awt.*;
  * Clase representativa de una celda en el diagrama e Gant
  *
  * @author Juan Gahona
- * @version 20.5.12
+ * @version 20.5.15
  */
 public class CellGant {
-    private int x;
-    private int y;
-    private int w;
-    private int h;
+    private final int X;
+    private final int Y;
+    private final int W;
+    private final int H;
 
-    private String text;
+    private final String VALUE;
 
-    private Color strokeColor;
-    private Color backgroundColor;
-    private Color textColor;
+    private final Color STROKE_COLOR = Color.BLACK;
+    private final Color BACKGROUND_COLOR = Color.WHITE;
+    private final Color TEXT_COLOR = Color.DARK_GRAY;
 
-    public CellGant(int x, int y, int w, int h, String text) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
+    /**
+     * Constructor de clase
+     *
+     * @param x     punto Top-Left
+     * @param y     punto Top-Left
+     * @param w     punto Bottom-Right
+     * @param h     punto Bottom-Right
+     * @param value ráfaga del proceso
+     */
+    public CellGant(int x, int y, int w, int h, int value) {
+        this.X = x;
+        this.Y = y;
+        this.W = w;
+        this.H = h;
 
-        this.text = text;
-
-        this.strokeColor = Color.BLACK;
-        this.backgroundColor = Color.WHITE;
-        this.textColor = Color.DARK_GRAY;
+        this.VALUE = Integer.toString(value);
     }
 
     public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
+        return X;
     }
 
     public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+        return Y;
     }
 
     public int getW() {
-        return w;
-    }
-
-    public void setW(int w) {
-        this.w = w;
+        return W;
     }
 
     public int getH() {
-        return h;
+        return H;
     }
 
-    public void setH(int h) {
-        this.h = h;
+    public String getValue() {
+        return VALUE;
     }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Color getStrokeColor() {
-        return strokeColor;
-    }
-
-    public void setStrokeColor(Color strokeColor) {
-        this.strokeColor = strokeColor;
-    }
-
-    public Color getBackgroundColor() {
-        return backgroundColor;
-    }
-
-    public void setBackgroundColor(Color backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    public Color getTextColor() {
-        return textColor;
-    }
-
-    public void setTextColor(Color textColor) {
-        this.textColor = textColor;
-    }
-
 
     /**
      * Método que dibuja una celda con sus datos.
@@ -104,9 +64,9 @@ public class CellGant {
      * @param g Los gráficos del JXFrame
      */
     public void paintCell(Graphics g) {
-        g.setColor(backgroundColor);
-        g.fillRect(x, y, w, h);
-        g.setColor(strokeColor);
-        g.drawRect(x, y, w, h);
+        g.setColor(BACKGROUND_COLOR);
+        g.fillRect(X, Y, W, H);
+        g.setColor(STROKE_COLOR);
+        g.drawRect(X, Y, W, H);
     }
 }
