@@ -2,6 +2,7 @@ package org.g2jl.models;
 
 import javafx.scene.control.Cell;
 import org.g2jl.controllers.C_Canvas;
+import org.g2jl.utils.UtilGraphics;
 import org.jdesktop.swingx.JXPanel;
 
 import javax.swing.border.TitledBorder;
@@ -33,6 +34,7 @@ public class DiagramaGant extends JXPanel {
      * Constructor de clase
      */
     public DiagramaGant() {
+        UtilGraphics.setFontCells();
         this.controller = new C_Canvas(this);
 
         setBorder(new TitledBorder(null, "Diagrama de Gant", TitledBorder.LEFT, TitledBorder.TOP));
@@ -127,6 +129,10 @@ public class DiagramaGant extends JXPanel {
     public void paintComponent(Graphics g) {
         List<Process> processes = new ArrayList<Process>();
         processes.add(new Process(1, "P1", 0, 5, 1));
+        processes.add(new Process(2, "P2", 0, 5, 1));
+        processes.add(new Process(3, "P3", 0, 5, 1));
+        processes.add(new Process(4, "P4", 0, 5, 1));
+        processes.add(new Process(5, "P5", 0, 5, 1));
 
         super.paintComponent(g);
         recalculateComponents(g);
