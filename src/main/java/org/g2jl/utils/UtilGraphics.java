@@ -1,5 +1,6 @@
 package org.g2jl.utils;
 
+import javax.swing.plaf.DimensionUIResource;
 import java.awt.*;
 
 /**
@@ -18,6 +19,19 @@ public class UtilGraphics {
     public static Font fontCells;
 
     private final static double heightFontCell = 0.4;
+
+    public final static int P_LEFT = 20;
+    public final static int P_TOP = 25;
+    public final static int P_RIGHT = 20;
+    public final static int P_BOTTOM = 22;
+
+    // START Celdas
+    public final static Dimension MIN_SIZE_CELL = new Dimension(60, 30);
+    public final static Dimension MAX_SIZE_CELL = new Dimension(9999, 80);
+    public final static int SPACE_BETWEEN_CELLS_ROW = 25;
+    public final static int MIN_NUM_CELLS_ROW = 10;
+    public static int numRowsCells = 0;
+    // END Celdas
 
     /**
      * Método que establece una fuente por defecto para las celdas del diagrama de Gant
@@ -78,5 +92,24 @@ public class UtilGraphics {
         int pY = topLeft.height + ((bottomRight.height - heightText) / 2) + fm.getAscent();
 
         return new Dimension(pX, pY);
+    }
+
+    public static Dimension calcCellSize(int numProcesses, Dimension panel) {
+        Dimension cellSize = new Dimension(MAX_SIZE_CELL);
+        cellSize.width = panel.width / numProcesses;
+        System.out.printf("%d - %d\n", cellSize.width, MIN_SIZE_CELL.width);
+        // cellSize.width tendrá el valor minimo de la celda si es inferior a este.
+        cellSize.width = Math.max(cellSize.width, MIN_SIZE_CELL.width);
+        System.out.printf("%d\n", cellSize.width);
+
+        if (numProcesses > MIN_NUM_CELLS_ROW) {
+            cellSize.width = panel.width / 10;
+            // En el caso de ser un numero divisible para 10 el numero de filas es correcto
+            // En el caso no ser divisible se suma una fila , ejemplo (int) 19/10 = 1, nos falta 1 fila
+            numRowsCells = numProcesses % 10 == 0 ? numProcesses / 10 : (numProcesses / 10) + 1;
+            cellSize.height = (panel.height - (SPACE_BETWEEN_CELLS_ROW * numRowsCells)) / numRowsCells;
+        }
+
+        return cellSize;
     }
 }
