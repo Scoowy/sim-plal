@@ -10,7 +10,8 @@ import java.awt.*;
  */
 public class UtilGraphics {
     public final static Color STROKE_COLOR = Color.BLACK;
-    public final static Color BACKGROUND_COLOR = Color.WHITE;
+    public final static Color BACKGROUND_COLOR_COUNTER = Color.WHITE;
+    public final static Color BACKGROUND_COLOR_CELL = Color.CYAN;
     public final static Color TEXT_COLOR = Color.DARK_GRAY;
 
     public final static Font FONT_COUNTER = new Font("Segoe UI", Font.BOLD, 26);
@@ -69,7 +70,7 @@ public class UtilGraphics {
      * @return Dimension punto donde dibujarlo
      */
     public static Dimension centerText(Graphics g, Dimension topLeft, Dimension bottomRight, String text) {
-        FontMetrics fm = g.getFontMetrics(fontCells);
+        FontMetrics fm = g.getFontMetrics(g.getFont());
         int widthText = fm.stringWidth(text);
         int heightText = fm.getHeight();
 
