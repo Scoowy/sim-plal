@@ -2,7 +2,9 @@ package org.g2jl.models;
 
 import org.g2jl.utils.UtilGraphics;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
 
 /**
  * Clase representativa de una celda en el diagrama e Gant
@@ -15,10 +17,11 @@ public class CellGant {
     private final Point TOP_LEFT;
     private final Point BOTTOM_RIGHT;
 
-
     private final String VALUE;
     private final String INIT_TIME;
     private final String FINAL_TIME;
+
+    private final boolean FIRST;
 
     private final Color STROKE_COLOR = Color.BLACK;
     private final Color BACKGROUND_COLOR = Color.WHITE;
@@ -32,7 +35,7 @@ public class CellGant {
      * @param value       ráfaga del proceso
      * @param initTime    tiempo inicial del proceso
      */
-    public CellGant(Point topLeft, Point bottomRight, String value, int initTime, int finalTime) {
+    public CellGant(Point topLeft, Point bottomRight, String value, int initTime, int finalTime, boolean first) {
         this.TOP_LEFT = topLeft;
         this.BOTTOM_RIGHT = bottomRight;
 
@@ -40,6 +43,7 @@ public class CellGant {
         this.INIT_TIME = Integer.toString(initTime);
         this.FINAL_TIME = Integer.toString(finalTime);
 
+        this.FIRST = first;
     }
 
     /**
@@ -59,9 +63,11 @@ public class CellGant {
         g.setColor(UtilGraphics.TEXT_COLOR);
         g.drawString(VALUE, textPoint.x, textPoint.y);
 
-//        Point initTimePoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, INIT_TIME, UtilGraphics.TEXT_RIGHT);
-//        g.setColor(UtilGraphics.TEXT_COLOR);
-//        g.drawString(INIT_TIME, initTimePoint.x, initTimePoint.y);
+        if (FIRST) {
+            Point initTimePoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, INIT_TIME, UtilGraphics.TEXT_RIGHT);
+            g.setColor(UtilGraphics.TEXT_COLOR);
+            g.drawString(INIT_TIME, initTimePoint.x, initTimePoint.y);
+        }
 
         Point finalTimePoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, FINAL_TIME, UtilGraphics.TEXT_LEFT);
         g.setColor(UtilGraphics.TEXT_COLOR);

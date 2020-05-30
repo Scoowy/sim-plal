@@ -68,24 +68,12 @@ public class Process implements Comparable<Process> {
         return waitTime;
     }
 
-    public void setWaitTime(int waitTime) {
-        this.waitTime = waitTime;
-    }
-
     public int getReturnTime() {
         return returnTime;
     }
 
-    public void setReturnTime(int returnTime) {
-        this.returnTime = returnTime;
-    }
-
     public int getInitTime() {
         return initTime;
-    }
-
-    public boolean moreBurst() {
-        return burstNum != 0;
     }
 
     public void runBurst() {
@@ -93,14 +81,6 @@ public class Process implements Comparable<Process> {
         if (burstNum == 0) {
             state = StateProcess.TERMINADO;
         }
-    }
-
-    public boolean isReady() {
-        return state == StateProcess.PREPARADO;
-    }
-
-    public boolean isWaiting() {
-        return state == StateProcess.ESPERANDO;
     }
 
     public boolean isRunning() {
@@ -123,7 +103,7 @@ public class Process implements Comparable<Process> {
 
     public void endProcess(int burst) {
         this.returnTime = burst;
-        this.waitTime = returnTime -(this.CPU_TIME + this.ARRIVAL_TIME);
+        this.waitTime = returnTime - (this.CPU_TIME + this.ARRIVAL_TIME);
     }
 
     /**
