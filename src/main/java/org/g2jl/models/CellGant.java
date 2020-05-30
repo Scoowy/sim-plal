@@ -14,12 +14,9 @@ public class CellGant {
 
     private final Point TOP_LEFT;
     private final Point BOTTOM_RIGHT;
-
-
     private final String VALUE;
     private final String INIT_TIME;
     private final String FINAL_TIME;
-
     private final Color STROKE_COLOR = Color.BLACK;
     private final Color BACKGROUND_COLOR = Color.WHITE;
     private final Color TEXT_COLOR = Color.DARK_GRAY;
@@ -52,19 +49,16 @@ public class CellGant {
         g.fillRect(TOP_LEFT.x, TOP_LEFT.y, BOTTOM_RIGHT.x, BOTTOM_RIGHT.y);
         g.setColor(STROKE_COLOR);
         g.drawRect(TOP_LEFT.x, TOP_LEFT.y, BOTTOM_RIGHT.x, BOTTOM_RIGHT.y);
-
         g.setFont(UtilGraphics.fontCells);
-
         Point textPoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, VALUE, UtilGraphics.TEXT_CENTER);
         g.setColor(UtilGraphics.TEXT_COLOR);
         g.drawString(VALUE, textPoint.x, textPoint.y);
-
-//        Point initTimePoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, INIT_TIME, UtilGraphics.TEXT_RIGHT);
-//        g.setColor(UtilGraphics.TEXT_COLOR);
-//        g.drawString(INIT_TIME, initTimePoint.x, initTimePoint.y);
-
         Point finalTimePoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, FINAL_TIME, UtilGraphics.TEXT_LEFT);
         g.setColor(UtilGraphics.TEXT_COLOR);
         g.drawString(FINAL_TIME, finalTimePoint.x, finalTimePoint.y);
     }
 }
+
+//        Point initTimePoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, INIT_TIME, UtilGraphics.TEXT_RIGHT);
+//        g.setColor(UtilGraphics.TEXT_COLOR);
+//        g.drawString(INIT_TIME, initTimePoint.x, initTimePoint.y);

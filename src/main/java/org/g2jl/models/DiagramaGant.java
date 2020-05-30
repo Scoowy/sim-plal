@@ -27,14 +27,11 @@ public class DiagramaGant extends JXPanel {
      */
     public DiagramaGant() {
         UtilGraphics.setFontCells();
-
         this.cells = new ArrayList<>();
-
         this.dimensionPanel = getSize();
         this.setPreferredSize(new Dimension(750, 200));
         this.sizeCanvas = getPreferredSize();
         System.out.printf("Constructor: %d - %d\n", sizeCanvas.width, sizeCanvas.height);
-
         this.counter = new BurstCounter();
     }
 
@@ -68,26 +65,18 @@ public class DiagramaGant extends JXPanel {
             } else {
                 bottomRight = UtilGraphics.calcCellSize(processesFinal.size(), dimensionPanel);
             }
-
             Point topLeft = new Point(UtilGraphics.PADDING_LEFT, UtilGraphics.PADDING_TOP);
-
             AtomicInteger counter = new AtomicInteger();
-
             UtilGraphics.calcFontSize(bottomRight.y);
-
             for (Process process : processesFinal) {
                 this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), process.getName(), process.getInitTime(), process.getReturnTime()));
-
                 topLeft.x += bottomRight.x;
-
                 if (counter.addAndGet(1) == 10) {
                     topLeft.x = UtilGraphics.PADDING_LEFT;
                     topLeft.y += UtilGraphics.SPACE_BETWEEN_CELLS_ROW + bottomRight.y;
-
                     counter.set(0);
                 }
             }
-
             if (processesRun != null) {
                 this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), processesRun.getName(), processesRun.getInitTime(), this.counter.getBurst().get()));
             }
@@ -96,7 +85,6 @@ public class DiagramaGant extends JXPanel {
             Point bottomRight = UtilGraphics.calcCellSize(1, dimensionPanel);
             Point topLeft = new Point(UtilGraphics.PADDING_LEFT, UtilGraphics.PADDING_TOP);
             UtilGraphics.calcFontSize(bottomRight.y);
-
             this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), processesRun.getName(), processesRun.getInitTime(), this.counter.getBurst().get()));
         }
     }
