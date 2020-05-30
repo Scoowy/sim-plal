@@ -8,7 +8,7 @@ import java.awt.*;
  * Clase representativa de una celda en el diagrama e Gant
  *
  * @author Juan Gahona
- * @version 20.5.29
+ * @version 20.5.30
  */
 public class CellGant {
 
@@ -59,9 +59,9 @@ public class CellGant {
         g.setColor(UtilGraphics.TEXT_COLOR);
         g.drawString(VALUE, textPoint.x, textPoint.y);
 
-        Point initTimePoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, INIT_TIME, UtilGraphics.TEXT_RIGHT);
-        g.setColor(UtilGraphics.TEXT_COLOR);
-        g.drawString(INIT_TIME, initTimePoint.x, initTimePoint.y);
+//        Point initTimePoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, INIT_TIME, UtilGraphics.TEXT_RIGHT);
+//        g.setColor(UtilGraphics.TEXT_COLOR);
+//        g.drawString(INIT_TIME, initTimePoint.x, initTimePoint.y);
 
         Point finalTimePoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, FINAL_TIME, UtilGraphics.TEXT_LEFT);
         g.setColor(UtilGraphics.TEXT_COLOR);
