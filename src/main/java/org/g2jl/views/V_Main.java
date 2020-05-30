@@ -4,22 +4,22 @@ import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlContra
 import net.miginfocom.swing.MigLayout;
 import org.g2jl.controllers.C_Main;
 import org.g2jl.interfaces.I_View;
-import org.g2jl.models.Pizarra;
+import org.g2jl.models.DiagramaGant;
 import org.jdesktop.swingx.*;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
- * @author Juan Gahona - Scoowy
+ * @author Juan Gahona
+ * @version 20.5.30
  */
 public class V_Main extends JXFrame implements I_View {
 
-    private JXPanel pnlCanvas;
+    private JScrollPane scrollCanvas;
+    private DiagramaGant pnlCanvas;
     private JXPanel pnlForm;
     private JXPanel pnlButtons;
 
@@ -41,15 +41,17 @@ public class V_Main extends JXFrame implements I_View {
     private JXTable tblFinal;
     private JXTable tblCarga;
 
-    private JXButton btnClearForm;
+    private JXButton btnFakeData;
     private JXButton btnAddForm;
     private JXButton btnClearTable;
     private JXButton btnDeleteTable;
     private JXButton btnReset;
-    private JXButton btnMensaje;
+    private JXButton btnPause;
     private JXButton btnIniciar;
 
     private C_Main controller;
+
+    private Timer tempo;
 
     public V_Main() {
         try {
@@ -58,10 +60,13 @@ public class V_Main extends JXFrame implements I_View {
             System.err.println("Fallo al cargar el tema.");
         }
         initComponents();
+        addController();
+        txtName.setEditable(false);
+        txtName.setText("P1");
     }
 
-    public JXButton getBtnMensaje() {
-        return btnMensaje;
+    public JXButton getBtnPause() {
+        return btnPause;
     }
 
     public JXButton getBtnReset() {
@@ -76,7 +81,7 @@ public class V_Main extends JXFrame implements I_View {
         return btnIniciar;
     }
 
-    public JXPanel getPnlCanvas() {
+    public DiagramaGant getPnlCanvas() {
         return pnlCanvas;
     }
 
@@ -140,24 +145,31 @@ public class V_Main extends JXFrame implements I_View {
         return txtPriority;
     }
 
-    public JXButton getXButton1() {
+    public JXButton getBtnAddForm() {
         return btnAddForm;
     }
 
-    public JXButton getBtnClearForm() {
-        return btnClearForm;
+    public JXButton getBtnFakeData() {
+        return btnFakeData;
     }
 
-    public JXButton getXButton2() {
+    public JXButton getBtnClearTable() {
         return btnClearTable;
     }
 
-    public JXButton getXButton3() {
+    public JXButton getBtnDeleteTable() {
         return btnDeleteTable;
     }
 
+    public Timer getTempo() {
+        return tempo;
+    }
+
     private void initComponents() {
-        pnlCanvas = new JXPanel();
+        tempo = new Timer(750, null);
+
+        scrollCanvas = new JScrollPane();
+        pnlCanvas = new DiagramaGant();
         pnlForm = new JXPanel();
         pnlButtons = new JXPanel();
 
@@ -179,19 +191,21 @@ public class V_Main extends JXFrame implements I_View {
         tblCarga = new JXTable();
         tblFinal = new JXTable();
 
-        btnClearForm = new JXButton();
+        btnFakeData = new JXButton();
         btnAddForm = new JXButton();
         btnClearTable = new JXButton();
         btnDeleteTable = new JXButton();
         btnReset = new JXButton();
-        btnMensaje = new JXButton();
+        btnPause = new JXButton();
         btnIniciar = new JXButton();
 
         //======== this ========
         controller = new C_Main(this);
+        pnlCanvas.setBurst(controller.getBurst());
         setTitle("Ventana principal");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(800, 600));
+        setMinimumSize(new Dimension(1296, 800));
+        setResizable(false);
         Container contentPane = getContentPane();
         contentPane.setLayout(new MigLayout(
                 "novisualpadding,hidemode 3",
@@ -205,24 +219,12 @@ public class V_Main extends JXFrame implements I_View {
                         "[]" +
                         "[]"));
 
+        //====== scrollCanvas =======
+        scrollCanvas.setViewportView(pnlCanvas);
+        scrollCanvas.setBorder(new TitledBorder(null, "Diagrama de Gant", TitledBorder.LEFT, TitledBorder.TOP));
+        scrollCanvas.createHorizontalScrollBar();
         //======== pnlCanvas ========
-        {
-            pnlCanvas.setBorder(new TitledBorder(null, "Diagrama de Gant", TitledBorder.LEFT, TitledBorder.TOP));
-            pnlCanvas.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-                @Override
-                public void propertyChange(java.beans.PropertyChangeEvent e
-                ) {
-                    if ("bord\u0065r".equals(e.getPropertyName())) throw new RuntimeException();
-                }
-            });
-            pnlCanvas.setLayout(new MigLayout(
-                    "fill,hidemode 3,align center center",
-                    // columns
-                    "[fill]",
-                    // rows
-                    "[fill]"));
-        }
-        contentPane.add(pnlCanvas, "pad 15 15 0 -15,north,width 100%:100%:100%,height 40%:40%:40%");
+        contentPane.add(scrollCanvas, "pad 15 15 0 -15,north,width 800:800:100%,height 250!");
 
         //======== formProcess ========
         {
@@ -245,7 +247,7 @@ public class V_Main extends JXFrame implements I_View {
             pnlForm.add(txtName, "cell 1 1,width 100%");
 
             //---- btnAddForm ----
-            btnAddForm.setText("Anadir");
+            btnAddForm.setText("Añadir");
             pnlForm.add(btnAddForm, "cell 2 1");
 
             //---- lblArrivalTime ----
@@ -254,11 +256,11 @@ public class V_Main extends JXFrame implements I_View {
             pnlForm.add(txtArrivalTime, "cell 1 2,width 100%");
 
             //---- btnClearForm ----
-            btnClearForm.setText("Limpiar");
-            pnlForm.add(btnClearForm, "cell 2 2");
+            btnFakeData.setText("Prueba");
+            pnlForm.add(btnFakeData, "cell 2 2");
 
             //---- lblCpuTime ----
-            lblCpuTime.setText("Rafaga CPU:");
+            lblCpuTime.setText("Ráfaga CPU:");
             pnlForm.add(lblCpuTime, "cell 0 3");
             pnlForm.add(txtCpuTime, "cell 1 3,width 100%");
 
@@ -387,31 +389,62 @@ public class V_Main extends JXFrame implements I_View {
             pnlButtons.add(btnReset, "cell 0 0");
 
             //---- btnMensaje ----
-            btnMensaje.setText("Mensaje");
-            btnMensaje.addActionListener(controller);
-            pnlButtons.add(btnMensaje, "cell 0 0");
+            btnPause.setText("Mensaje");
+            btnPause.addActionListener(controller);
+            pnlButtons.add(btnPause, "cell 0 0");
 
             //---- btnIniciar ----
             btnIniciar.setText("Iniciar");
             pnlButtons.add(btnIniciar, "cell 0 0");
         }
         contentPane.add(pnlButtons, "pad 0 50% 0 0,south,gapx null 15,gapy null 15");
-        setSize(800, 600);
+        setSize(1296, 800);
         setLocationRelativeTo(null);
+    }
 
-        // TODO: Aqui la pizarra
-//        pnlCanvas.add(new Pizarra(), "width 100%, height 100%");
+    public void enabledForm(boolean enabled){
+        txtName.setEnabled(enabled);
+        txtArrivalTime.setEnabled(enabled);
+        txtCpuTime.setEnabled(enabled);
+        txtPriority.setEnabled(enabled);
+
+        btnAddForm.setEnabled(enabled);
+        btnFakeData.setEnabled(enabled);
+    }
+
+    public void swichtButtons(boolean enabled) {
+        btnIniciar.setEnabled(enabled);
+        btnPause.setEnabled(!enabled);
     }
 
     @Override
-    public void addButtons() {
-        btnMensaje.addActionListener(controller);
+    public void addController() {
+        btnAddForm.setActionCommand("ADD_PROCESS");
         btnAddForm.addActionListener(controller);
-        btnClearForm.addActionListener(controller);
+
+        btnFakeData.setActionCommand("TEST_PROCESS");
+        btnFakeData.addActionListener(controller);
+
+        btnClearTable.setActionCommand("CLEAR_TABLE");
         btnClearTable.addActionListener(controller);
+
+        btnDeleteTable.setActionCommand("DELETE_PROCESS");
         btnDeleteTable.addActionListener(controller);
+
+        btnPause.setActionCommand("PAUSE_SIMULATION");
+        btnPause.addActionListener(controller);
+
+        btnIniciar.setActionCommand("PLAY_SIMULATION");
         btnIniciar.addActionListener(controller);
+
+        btnReset.setActionCommand("RESET_SIMULATION");
         btnReset.addActionListener(controller);
+
+        tempo.setActionCommand("TEMPO");
+        tempo.addActionListener(controller);
+
+        tblCarga.setName("TABLA_CARGA");
+        tblCarga.addMouseListener(controller);
     }
 
 }
