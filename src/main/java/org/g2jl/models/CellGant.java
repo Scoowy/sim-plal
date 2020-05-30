@@ -47,7 +47,7 @@ public class CellGant {
     }
 
     /**
-     * Método que dibuja una celda con sus datos.
+     * Método que dibuja una celda con sus datos2.
      *
      * @param g Los gráficos del JXFrame
      */
