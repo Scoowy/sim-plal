@@ -1,36 +1,27 @@
 package org.g2jl.models;
 
-import javafx.scene.control.Cell;
-import org.g2jl.controllers.C_Canvas;
 import org.g2jl.utils.UtilData;
 import org.g2jl.utils.UtilGraphics;
 import org.jdesktop.swingx.JXPanel;
 
-import javax.rmi.CORBA.Util;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Clase heredada de un JXFrame en la que se dibujara el diagrama de Gant.
  *
  * @author Juan Gahona
- * @version 20.5.15
+ * @version 20.5.29
+ * @see "https://stackoverflow.com/a/37460185/230513"
  */
 public class DiagramaGant extends JXPanel {
-    private C_Canvas controller;
     private List<CellGant> cells;
     private Dimension dimensionPanel;
     private BurstCounter counter;
 
-    private final Dimension minSizeCell = new Dimension(60, 30);
-    // Producto de el minimo ancho del canvas posible dividido para minSizeCell.width
-    private final int minNumCells = 10;
-    private final int spaceBetweenCellsRow = 10;
-
-    // Padding Left Top Right Bottom
-    private final int[] padds = {20, 25, 20, 22};
+    private Dimension sizeCanvas;
 
     /**
      * Constructor de clase
@@ -38,20 +29,16 @@ public class DiagramaGant extends JXPanel {
     public DiagramaGant() {
         UtilGraphics.setFontCells();
 
-        this.controller = new C_Canvas(this);
-        this.cells = new ArrayList<CellGant>();
+        this.cells = new ArrayList<>();
 
-        setBorder(new TitledBorder(null, "Diagrama de Gant", TitledBorder.LEFT, TitledBorder.TOP));
+//        setBorder(new TitledBorder(null, "Diagrama de Gant", TitledBorder.LEFT, TitledBorder.TOP));
 
         this.dimensionPanel = getSize();
-        this.counter = new BurstCounter(123);
+        this.setPreferredSize(new Dimension(750, 200));
+        this.sizeCanvas = getPreferredSize();
+        System.out.printf("Constructor: %d - %d\n", sizeCanvas.width, sizeCanvas.height);
 
-        addListeners();
-
-    }
-
-    public void addListeners() {
-        addMouseListener(controller);
+        this.counter = new BurstCounter(UtilData.BURST);
     }
 
     /**
@@ -72,31 +59,30 @@ public class DiagramaGant extends JXPanel {
      */
     public void processListToCellList(List<Process> processes) {
         if (processes.size() != 0) {
-            this.cells = new ArrayList<CellGant>();
+            this.cells = new ArrayList<>();
 
             // Calcula el tamaño de las celdas
-            Dimension bottomRight = UtilGraphics.calcCellSize(processes.size(), dimensionPanel);
+            Point bottomRight = UtilGraphics.calcCellSize(processes.size(), dimensionPanel);
 
-            int xPoint = UtilGraphics.P_LEFT;
-            int yPoint = UtilGraphics.P_TOP;
+            Point topLeft = new Point(UtilGraphics.PADDING_LEFT, UtilGraphics.PADDING_TOP);
 
-            int counter = 0;
+            AtomicInteger counter = new AtomicInteger();
+
+            UtilGraphics.calcFontSize(bottomRight.y);
 
             for (Process process : processes) {
-                this.cells.add(new CellGant(xPoint, yPoint, bottomRight.width, bottomRight.height, process.getBurstNum()));
-                counter += 1;
+                this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), process.getName(), process.getWaitTime(), this.counter.getBurst()));
 
-                xPoint += bottomRight.width;
+                topLeft.x += bottomRight.x;
 
-                if (counter == 10) {
-                    xPoint = UtilGraphics.P_LEFT;
-                    yPoint += UtilGraphics.SPACE_BETWEEN_CELLS_ROW + bottomRight.height;
+                if (counter.addAndGet(1) == 10) {
+                    topLeft.x = UtilGraphics.PADDING_LEFT;
+                    topLeft.y += UtilGraphics.SPACE_BETWEEN_CELLS_ROW + bottomRight.y;
 
-                    counter = 0;
+                    counter.set(0);
                 }
             }
         }
-
     }
 
     /**
@@ -104,20 +90,20 @@ public class DiagramaGant extends JXPanel {
      */
     public void recalculateDimension() {
         dimensionPanel = getSize();
-        dimensionPanel.width = dimensionPanel.width - UtilGraphics.P_RIGHT * 2;
-        dimensionPanel.height = dimensionPanel.height - UtilGraphics.P_BOTTOM * 2;
+        dimensionPanel.width = dimensionPanel.width - UtilGraphics.PADDING_RIGHT * 2;
+        dimensionPanel.height = dimensionPanel.height - UtilGraphics.PADDING_BOTTOM * 2;
     }
 
     public void recalculateComponents(Graphics g) {
         recalculateDimension();
-        Dimension panelBRPoint = new Dimension(dimensionPanel.width + UtilGraphics.P_LEFT, dimensionPanel.height + UtilGraphics.P_TOP * 2 - 9);
+        Dimension panelBRPoint = new Dimension(dimensionPanel.width + UtilGraphics.PADDING_LEFT, dimensionPanel.height + UtilGraphics.PADDING_TOP * 2 - 9);
         counter.calculatePosition(panelBRPoint);
     }
 
     public void paintTestGraphics(Graphics g) {
         String texto = String.format("%d - %d", dimensionPanel.width, dimensionPanel.height);
-        g.drawRect(UtilGraphics.P_LEFT, UtilGraphics.P_TOP, dimensionPanel.width, dimensionPanel.height);
-        g.drawString(texto, UtilGraphics.P_LEFT, UtilGraphics.P_TOP);
+        g.drawRect(UtilGraphics.PADDING_LEFT, UtilGraphics.PADDING_TOP, dimensionPanel.width, dimensionPanel.height);
+        g.drawString(texto, UtilGraphics.PADDING_LEFT, UtilGraphics.PADDING_TOP);
     }
 
     /**
@@ -126,15 +112,14 @@ public class DiagramaGant extends JXPanel {
      * @param g contexto de los gráficos
      */
     public void paintComponent(Graphics g) {
-        List<Process> processes = UtilData.generateProcesses(45);
+        List<Process> processes = UtilData.generateProcesses(30);
 
         super.paintComponent(g);
         recalculateComponents(g);
-
-        paintTestGraphics(g);
 
         processListToCellList(processes);
         paintCells(g);
         counter.paintCounter(g);
     }
+
 }
