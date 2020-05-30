@@ -14,10 +14,11 @@ import java.awt.*;
 
 /**
  * @author Juan Gahona - Scoowy
- * @version 20.5.12
+ * @version 20.5.29
  */
 public class V_Main extends JXFrame implements I_View {
 
+    private JScrollPane scrollCanvas;
     private DiagramaGant pnlCanvas;
     private JXPanel pnlForm;
     private JXPanel pnlButtons;
@@ -156,6 +157,7 @@ public class V_Main extends JXFrame implements I_View {
     }
 
     private void initComponents() {
+        scrollCanvas = new JScrollPane();
         pnlCanvas = new DiagramaGant();
         pnlForm = new JXPanel();
         pnlButtons = new JXPanel();
@@ -190,7 +192,8 @@ public class V_Main extends JXFrame implements I_View {
         controller = new C_Main(this);
         setTitle("Ventana principal");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(800, 600));
+        setMinimumSize(new Dimension(1296, 800));
+        setResizable(false);
         Container contentPane = getContentPane();
         contentPane.setLayout(new MigLayout(
                 "novisualpadding,hidemode 3",
@@ -204,8 +207,12 @@ public class V_Main extends JXFrame implements I_View {
                         "[]" +
                         "[]"));
 
+        //====== scrollCanvas =======
+        scrollCanvas.setViewportView(pnlCanvas);
+        scrollCanvas.setBorder(new TitledBorder(null, "Diagrama de Gant", TitledBorder.LEFT, TitledBorder.TOP));
+        scrollCanvas.createHorizontalScrollBar();
         //======== pnlCanvas ========
-        contentPane.add(pnlCanvas, "pad 15 15 0 -15,north,width 100%:100%:100%,height 40%:40%:40%");
+        contentPane.add(scrollCanvas, "pad 15 15 0 -15,north,width 800:800:100%,height 250!");
 
         //======== formProcess ========
         {
@@ -379,7 +386,7 @@ public class V_Main extends JXFrame implements I_View {
             pnlButtons.add(btnIniciar, "cell 0 0");
         }
         contentPane.add(pnlButtons, "pad 0 50% 0 0,south,gapx null 15,gapy null 15");
-        setSize(800, 600);
+        setSize(1296, 800);
         setLocationRelativeTo(null);
     }
 
