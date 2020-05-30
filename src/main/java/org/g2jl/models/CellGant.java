@@ -1,20 +1,24 @@
 package org.g2jl.models;
 
+import org.g2jl.utils.UtilGraphics;
+
 import java.awt.*;
 
 /**
  * Clase representativa de una celda en el diagrama e Gant
  *
  * @author Juan Gahona
- * @version 20.5.15
+ * @version 20.5.29
  */
 public class CellGant {
-    private final int X;
-    private final int Y;
-    private final int W;
-    private final int H;
+
+    private final Point TOP_LEFT;
+    private final Point BOTTOM_RIGHT;
+
 
     private final String VALUE;
+    private final String INIT_TIME;
+    private final String FINAL_TIME;
 
     private final Color STROKE_COLOR = Color.BLACK;
     private final Color BACKGROUND_COLOR = Color.WHITE;
@@ -23,39 +27,19 @@ public class CellGant {
     /**
      * Constructor de clase
      *
-     * @param x     punto Top-Left
-     * @param y     punto Top-Left
-     * @param w     punto Bottom-Right
-     * @param h     punto Bottom-Right
-     * @param value ráfaga del proceso
+     * @param topLeft     punto Top-Left
+     * @param bottomRight punto Bottom-Right
+     * @param value       ráfaga del proceso
+     * @param initTime    tiempo inicial del proceso
      */
-    public CellGant(int x, int y, int w, int h, int value) {
-        this.X = x;
-        this.Y = y;
-        this.W = w;
-        this.H = h;
+    public CellGant(Point topLeft, Point bottomRight, String value, int initTime, int finalTime) {
+        this.TOP_LEFT = topLeft;
+        this.BOTTOM_RIGHT = bottomRight;
 
-        this.VALUE = Integer.toString(value);
-    }
+        this.VALUE = value;
+        this.INIT_TIME = Integer.toString(initTime);
+        this.FINAL_TIME = Integer.toString(finalTime);
 
-    public int getX() {
-        return X;
-    }
-
-    public int getY() {
-        return Y;
-    }
-
-    public int getW() {
-        return W;
-    }
-
-    public int getH() {
-        return H;
-    }
-
-    public String getValue() {
-        return VALUE;
     }
 
     /**
@@ -64,9 +48,23 @@ public class CellGant {
      * @param g Los gráficos del JXFrame
      */
     public void paintCell(Graphics g) {
-        g.setColor(BACKGROUND_COLOR);
-        g.fillRect(X, Y, W, H);
+        g.setColor(UtilGraphics.BACKGROUND_COLOR_CELL);
+        g.fillRect(TOP_LEFT.x, TOP_LEFT.y, BOTTOM_RIGHT.x, BOTTOM_RIGHT.y);
         g.setColor(STROKE_COLOR);
-        g.drawRect(X, Y, W, H);
+        g.drawRect(TOP_LEFT.x, TOP_LEFT.y, BOTTOM_RIGHT.x, BOTTOM_RIGHT.y);
+
+        g.setFont(UtilGraphics.fontCells);
+
+        Point textPoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, VALUE, UtilGraphics.TEXT_CENTER);
+        g.setColor(UtilGraphics.TEXT_COLOR);
+        g.drawString(VALUE, textPoint.x, textPoint.y);
+
+        Point initTimePoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, INIT_TIME, UtilGraphics.TEXT_RIGHT);
+        g.setColor(UtilGraphics.TEXT_COLOR);
+        g.drawString(INIT_TIME, initTimePoint.x, initTimePoint.y);
+
+        Point finalTimePoint = UtilGraphics.alignText(g, TOP_LEFT, BOTTOM_RIGHT, FINAL_TIME, UtilGraphics.TEXT_LEFT);
+        g.setColor(UtilGraphics.TEXT_COLOR);
+        g.drawString(FINAL_TIME, finalTimePoint.x, finalTimePoint.y);
     }
 }
