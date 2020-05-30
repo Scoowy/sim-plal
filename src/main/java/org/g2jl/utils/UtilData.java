@@ -8,7 +8,7 @@ import org.g2jl.models.Process;
  * Clase generadora de datos de prueba.
  *
  * @author Juan Gahona
- * @version 20.5.16
+ * @version 20.5.30
  */
 public class UtilData {
     private final static String PROCESS_NAME = "P";
@@ -23,5 +23,14 @@ public class UtilData {
         }
 
         return processes;
+    }
+
+    public static int StringToInt(String num){
+        try {
+            return Integer.parseInt(num);
+        } catch (NumberFormatException ex) {
+            System.err.println(ex.getMessage());
+            return -1;
+        }
     }
 }
