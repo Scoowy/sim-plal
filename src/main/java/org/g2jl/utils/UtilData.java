@@ -12,7 +12,7 @@ import org.g2jl.models.Process;
  */
 public class UtilData {
     private final static String PROCESS_NAME = "P";
-    public final static int BURST = 999;
+    public final static int BURST = 0;
 
     public static ArrayList<Process> generateProcesses(int numProcesses) {
         ArrayList<Process> processes = new ArrayList<>();
