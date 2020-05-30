@@ -3,33 +3,34 @@ package org.g2jl.models;
 import org.g2jl.utils.UtilGraphics;
 
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Clase que pinta un cuadro con el contador de ráfagas de CPU actuales.
  *
  * @author Juan Gahona
- * @version 20.5.29
+ * @version 20.5.30
  */
 public class BurstCounter {
     private final Point topLeft;
     private final Point bottomRight = new Point(70, 30);
-    private int burst;
+    private AtomicInteger burst;
 
     /**
      * Constructor de clase.
      *
      * @param burst ráfaga de CPU actual
      */
-    public BurstCounter(int burst) {
+    public BurstCounter() {
         this.topLeft = new Point(0, 0);
-        this.burst = burst;
+        this.burst = null;
     }
 
-    public int getBurst() {
+    public AtomicInteger getBurst() {
         return burst;
     }
 
-    public void setBurst(int burst) {
+    public void setBurst(AtomicInteger burst) {
         this.burst = burst;
     }
 
@@ -46,7 +47,7 @@ public class BurstCounter {
 
         g.setFont(UtilGraphics.FONT_COUNTER);
         g.setColor(UtilGraphics.TEXT_COLOR);
-        Point posText = UtilGraphics.alignText(g, topLeft, bottomRight, burst, UtilGraphics.TEXT_CENTER);
-        g.drawString(Integer.toString(burst), posText.x, posText.y);
+        Point posText = UtilGraphics.alignText(g, topLeft, bottomRight, burst.get(), UtilGraphics.TEXT_CENTER);
+        g.drawString(Integer.toString(burst.get()), posText.x, posText.y);
     }
 }

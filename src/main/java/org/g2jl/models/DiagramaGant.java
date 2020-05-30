@@ -1,6 +1,5 @@
 package org.g2jl.models;
 
-import org.g2jl.utils.UtilData;
 import org.g2jl.utils.UtilGraphics;
 import org.jdesktop.swingx.JXPanel;
 
@@ -13,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Clase heredada de un JXFrame en la que se dibujara el diagrama de Gant.
  *
  * @author Juan Gahona
- * @version 20.5.29
+ * @version 20.5.30
  * @see "https://stackoverflow.com/a/37460185/230513"
  */
 public class DiagramaGant extends JXPanel {
@@ -31,14 +30,16 @@ public class DiagramaGant extends JXPanel {
 
         this.cells = new ArrayList<>();
 
-//        setBorder(new TitledBorder(null, "Diagrama de Gant", TitledBorder.LEFT, TitledBorder.TOP));
-
         this.dimensionPanel = getSize();
         this.setPreferredSize(new Dimension(750, 200));
         this.sizeCanvas = getPreferredSize();
         System.out.printf("Constructor: %d - %d\n", sizeCanvas.width, sizeCanvas.height);
 
-        this.counter = new BurstCounter(UtilData.BURST);
+        this.counter = new BurstCounter();
+    }
+
+    public void setBurst(AtomicInteger burst) {
+        this.counter.setBurst(burst);
     }
 
     /**
@@ -55,14 +56,18 @@ public class DiagramaGant extends JXPanel {
     /**
      * Método que crea una celda por cada proceso
      *
-     * @param processes lista de procesos
+     * @param processesFinal lista de procesos
      */
-    public void processListToCellList(List<Process> processes) {
-        if (processes.size() != 0) {
+    public void processListToCellList(List<Process> processesFinal, Process processesRun) {
+        if (processesFinal.size() != 0) {
             this.cells = new ArrayList<>();
-
+            Point bottomRight = null;
             // Calcula el tamaño de las celdas
-            Point bottomRight = UtilGraphics.calcCellSize(processes.size(), dimensionPanel);
+            if (processesRun != null) {
+                bottomRight = UtilGraphics.calcCellSize(processesFinal.size() + 1, dimensionPanel);
+            } else {
+                bottomRight = UtilGraphics.calcCellSize(processesFinal.size(), dimensionPanel);
+            }
 
             Point topLeft = new Point(UtilGraphics.PADDING_LEFT, UtilGraphics.PADDING_TOP);
 
@@ -70,8 +75,8 @@ public class DiagramaGant extends JXPanel {
 
             UtilGraphics.calcFontSize(bottomRight.y);
 
-            for (Process process : processes) {
-                this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), process.getName(), process.getWaitTime(), this.counter.getBurst()));
+            for (Process process : processesFinal) {
+                this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), process.getName(), process.getInitTime(), process.getReturnTime()));
 
                 topLeft.x += bottomRight.x;
 
@@ -82,6 +87,17 @@ public class DiagramaGant extends JXPanel {
                     counter.set(0);
                 }
             }
+
+            if (processesRun != null) {
+                this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), processesRun.getName(), processesRun.getInitTime(), this.counter.getBurst().get()));
+            }
+        } else if (processesRun != null) {
+            this.cells = new ArrayList<>();
+            Point bottomRight = UtilGraphics.calcCellSize(1, dimensionPanel);
+            Point topLeft = new Point(UtilGraphics.PADDING_LEFT, UtilGraphics.PADDING_TOP);
+            UtilGraphics.calcFontSize(bottomRight.y);
+
+            this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), processesRun.getName(), processesRun.getInitTime(), this.counter.getBurst().get()));
         }
     }
 
@@ -112,12 +128,8 @@ public class DiagramaGant extends JXPanel {
      * @param g contexto de los gráficos
      */
     public void paintComponent(Graphics g) {
-        List<Process> processes = UtilData.generateProcesses(30);
-
         super.paintComponent(g);
         recalculateComponents(g);
-
-        processListToCellList(processes);
         paintCells(g);
         counter.paintCounter(g);
     }
