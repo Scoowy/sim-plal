@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Clase que pinta un cuadro con el contador de ráfagas de CPU actuales.
+ * Clase que pinta un cuadro con el contador de ráfagas de CPU actuales2.
  *
  * @author Juan Gahona
  * @version 20.5.30
