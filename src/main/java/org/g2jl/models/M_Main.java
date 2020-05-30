@@ -3,7 +3,7 @@ package org.g2jl.models;
 import org.g2jl.controllers.C_Main;
 import org.g2jl.utils.UtilData;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Modelo de la vista Main
  *
  * @author Juan Gahona
- * @version 20.5.29
+ * @version 20.5.30
  */
 public class M_Main {
     private final C_Main controller;
@@ -23,7 +23,6 @@ public class M_Main {
     private int idProcess;
 
     public AtomicInteger burst;
-    private StateSimulation simulationState;
 
     private boolean emptyCola;
     private boolean emptyCarga;
@@ -39,7 +38,6 @@ public class M_Main {
         this.idProcess = 1;
 
         this.burst = new AtomicInteger(0);
-        this.simulationState = StateSimulation.STOP;
     }
 
     public int getIdProcess() {
@@ -63,7 +61,7 @@ public class M_Main {
             showMessage(String.format("\"%s\" no es un numero", priority));
         } else {
             addNewProcess(nombre, at, cb, py);
-            controller.getView().getTxtName().setText(String.format("P%d", idProcess));
+            controller.clearForm();
         }
 
     }
@@ -99,9 +97,7 @@ public class M_Main {
                 moveProcessCargaToCola(id);
             }
         } else {
-            if (processes_cola.isEmpty()) {
-                simulationState = StateSimulation.END_PROCESS;
-            }
+            emptyCarga = true;
         }
         return !ids.isEmpty();
     }
@@ -111,6 +107,7 @@ public class M_Main {
             if (process.getId() == idProcess) {
                 process.waitProcess();
                 processes_cola.add(process);
+                emptyCola = false;
             }
         }
         deleteProcess(idProcess, "CARGA");
@@ -161,12 +158,12 @@ public class M_Main {
             processes_cola.get(0).runProcess(burst.get());
             return processes_cola.get(0);
         } else {
-            emptyCarga = true;
+            emptyCola = true;
             return null;
         }
     }
 
-    public Process haveProcessRuning() {
+    public Process haveProcessRunning() {
         for (Process process : processes_cola) {
             if (process.isRunning()) {
                 return process;
@@ -186,7 +183,7 @@ public class M_Main {
         emptyCarga = processes_carga.isEmpty();
 
         // Obtenemos el id del proceso en ejecución de existir si no -1
-        Process procRunning = haveProcessRuning();
+        Process procRunning = haveProcessRunning();
         // Comprobamos si existe un proceso
         if (procRunning != null) {
             // Procesamos unicamente un burst de este proceso
@@ -196,10 +193,8 @@ public class M_Main {
                 emptyCola = processes_cola.isEmpty();
                 // Busca el siguiente de existir
                 procRunning = nextProcessRunning();
-                controller.getView().getPnlCanvas().processListToCellList(processes_final, procRunning);
-            } else {
-                controller.getView().getPnlCanvas().processListToCellList(processes_final, procRunning);
             }
+            controller.getView().getPnlCanvas().processListToCellList(processes_final, procRunning);
         } else {
             // Busca el siguiente de existir
             procRunning = nextProcessRunning();
@@ -223,7 +218,6 @@ public class M_Main {
             }
             return true;
         }
-
         // Caso contrario false
         return false;
     }
@@ -244,15 +238,13 @@ public class M_Main {
         idProcess = 1;
 
         burst = new AtomicInteger(0);
-
-        simulationState = StateSimulation.STOP;
     }
 
     public ArrayList<Process> getProcesses_carga() {
         return processes_carga;
     }
 
-    public void setProcesses_carga(ArrayList<Process> processes_carga){
+    public void setProcesses_carga(ArrayList<Process> processes_carga) {
         this.processes_carga = processes_carga;
     }
 
@@ -264,7 +256,7 @@ public class M_Main {
         return processes_final;
     }
 
-    public boolean runingSimulation() {
+    public boolean isRunningSimulation() {
         return !(emptyCarga && emptyCola);
     }
 

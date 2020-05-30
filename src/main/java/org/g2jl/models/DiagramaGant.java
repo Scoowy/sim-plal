@@ -3,7 +3,9 @@ package org.g2jl.models;
 import org.g2jl.utils.UtilGraphics;
 import org.jdesktop.swingx.JXPanel;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,18 +22,19 @@ public class DiagramaGant extends JXPanel {
     private Dimension dimensionPanel;
     private BurstCounter counter;
 
-    private Dimension sizeCanvas;
-
     /**
      * Constructor de clase
      */
     public DiagramaGant() {
         UtilGraphics.setFontCells();
+
         this.cells = new ArrayList<>();
+
         this.dimensionPanel = getSize();
         this.setPreferredSize(new Dimension(750, 200));
-        this.sizeCanvas = getPreferredSize();
-        System.out.printf("Constructor: %d - %d\n", sizeCanvas.width, sizeCanvas.height);
+//        Dimension sizeCanvas = getPreferredSize();
+//        System.out.printf("Constructor: %d - %d\n", sizeCanvas.width, sizeCanvas.height);
+
         this.counter = new BurstCounter();
     }
 
@@ -58,34 +61,49 @@ public class DiagramaGant extends JXPanel {
     public void processListToCellList(List<Process> processesFinal, Process processesRun) {
         if (processesFinal.size() != 0) {
             this.cells = new ArrayList<>();
-            Point bottomRight = null;
+            Point bottomRight;
             // Calcula el tamaño de las celdas
             if (processesRun != null) {
                 bottomRight = UtilGraphics.calcCellSize(processesFinal.size() + 1, dimensionPanel);
             } else {
                 bottomRight = UtilGraphics.calcCellSize(processesFinal.size(), dimensionPanel);
             }
+
             Point topLeft = new Point(UtilGraphics.PADDING_LEFT, UtilGraphics.PADDING_TOP);
+
             AtomicInteger counter = new AtomicInteger();
+
+            boolean first = true;
+
             UtilGraphics.calcFontSize(bottomRight.y);
+
             for (Process process : processesFinal) {
-                this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), process.getName(), process.getInitTime(), process.getReturnTime()));
+                if (first) {
+                    this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), process.getName(), process.getInitTime(), process.getReturnTime(), true));
+                    first = false;
+                }
+                this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), process.getName(), process.getInitTime(), process.getReturnTime(), false));
+
                 topLeft.x += bottomRight.x;
+
                 if (counter.addAndGet(1) == 10) {
                     topLeft.x = UtilGraphics.PADDING_LEFT;
                     topLeft.y += UtilGraphics.SPACE_BETWEEN_CELLS_ROW + bottomRight.y;
+
                     counter.set(0);
                 }
             }
+
             if (processesRun != null) {
-                this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), processesRun.getName(), processesRun.getInitTime(), this.counter.getBurst().get()));
+                this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), processesRun.getName(), processesRun.getInitTime(), this.counter.getBurst().get(), false));
             }
         } else if (processesRun != null) {
             this.cells = new ArrayList<>();
             Point bottomRight = UtilGraphics.calcCellSize(1, dimensionPanel);
             Point topLeft = new Point(UtilGraphics.PADDING_LEFT, UtilGraphics.PADDING_TOP);
             UtilGraphics.calcFontSize(bottomRight.y);
-            this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), processesRun.getName(), processesRun.getInitTime(), this.counter.getBurst().get()));
+
+            this.cells.add(new CellGant(new Point(topLeft), new Point(bottomRight), processesRun.getName(), processesRun.getInitTime(), this.counter.getBurst().get(), true));
         }
     }
 
@@ -98,7 +116,7 @@ public class DiagramaGant extends JXPanel {
         dimensionPanel.height = dimensionPanel.height - UtilGraphics.PADDING_BOTTOM * 2;
     }
 
-    public void recalculateComponents(Graphics g) {
+    public void recalculateComponents() {
         recalculateDimension();
         Dimension panelBRPoint = new Dimension(dimensionPanel.width + UtilGraphics.PADDING_LEFT, dimensionPanel.height + UtilGraphics.PADDING_TOP * 2 - 9);
         counter.calculatePosition(panelBRPoint);
@@ -117,7 +135,7 @@ public class DiagramaGant extends JXPanel {
      */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        recalculateComponents(g);
+        recalculateComponents();
         paintCells(g);
         counter.paintCounter(g);
     }
