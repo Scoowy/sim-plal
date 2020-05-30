@@ -6,7 +6,7 @@
 
     <groupId>org.g2jl</groupId>
     <artifactId>sim-plal</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>Beta-20.5.30</version>
     <build>
         <plugins>
             <plugin>
