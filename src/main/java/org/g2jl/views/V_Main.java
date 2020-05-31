@@ -1,6 +1,5 @@
 package org.g2jl.views;
 
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlContrastIJTheme;
 import net.miginfocom.swing.MigLayout;
 import org.g2jl.controllers.C_Main;
 import org.g2jl.interfaces.I_View;
@@ -15,7 +14,6 @@ import org.jdesktop.swingx.JXTextField;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -23,34 +21,42 @@ import java.awt.Container;
 import java.awt.Dimension;
 
 /**
+ * Vista principal del programa, se usa la librería de MigLayout para la gestión de los componentes en la interfaz.
+ *
  * @author Juan Gahona
  * @version 20.5.30
  */
 public class V_Main extends JXFrame implements I_View {
 
+    // Declaración de los elementos que contendrá ala venta principal
     private JScrollPane scrollCanvas;
     private DiagramaGant pnlCanvas;
     private JXPanel pnlForm;
     private JXPanel pnlButtons;
 
+    // === Labels ===
     private JXLabel lblName;
     private JXLabel lblArrivalTime;
     private JXLabel lblCpuTime;
     private JXLabel lblPriority;
 
+    // === TextFields de SwingX ===
     private JXTextField txtName;
     private JXTextField txtArrivalTime;
     private JXTextField txtCpuTime;
     private JXTextField txtPriority;
 
+    // === JScrollPanes ===
     private JScrollPane scrollCola;
     private JScrollPane scrollFinal;
     private JScrollPane scrollCarga;
 
+    // === JTables de SwingX ===
     private JXTable tblCola;
     private JXTable tblFinal;
     private JXTable tblCarga;
 
+    // === JButtons de SwingX ===
     private JXButton btnFakeData;
     private JXButton btnAddForm;
     private JXButton btnClearTable;
@@ -58,22 +64,23 @@ public class V_Main extends JXFrame implements I_View {
     private JXButton btnReset;
     private JXButton btnIniciar;
 
+    // === Controlador de la venta principal ===
     private C_Main controller;
 
+    // === Timer global encargado de la secuencia de las ráfagas ===
     private Timer tempo;
 
+    /**
+     * Constructor de clase
+     */
     public V_Main() {
-        try {
-            UIManager.setLookAndFeel(new FlatLightOwlContrastIJTheme());
-        } catch (Exception ex) {
-            System.err.println("Fallo al cargar el tema.");
-        }
         initComponents();
         addController();
         txtName.setEditable(false);
-        txtName.setText("P1");
+        txtName.setText("P0");
     }
 
+    // === Getters y Setters ===
     public JXButton getBtnIniciar() {
         return btnIniciar;
     }
@@ -118,8 +125,11 @@ public class V_Main extends JXFrame implements I_View {
         return tempo;
     }
 
+    /**
+     * Método encargado de inicializar los componentes de la vista
+     */
     private void initComponents() {
-        tempo = new Timer(750, null);
+        tempo = new Timer(750, null); // Cada 750 ms se lanzara un evento
 
         scrollCanvas = new JScrollPane();
         pnlCanvas = new DiagramaGant();
@@ -154,7 +164,7 @@ public class V_Main extends JXFrame implements I_View {
         //======== this ========
         controller = new C_Main(this);
         pnlCanvas.setBurst(controller.getBurst());
-        setTitle("Ventana principal");
+        setTitle("Sistemas Operativos | Short Job First");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(1296, 800));
         setResizable(false);
@@ -307,8 +317,14 @@ public class V_Main extends JXFrame implements I_View {
         setLocationRelativeTo(null);
     }
 
-    private void modelDefaultTable(JXTable tblCola, JScrollPane scrollCola) {
-        tblCola.setModel(new DefaultTableModel(
+    /**
+     * Método que establece un DefaultTableModel y un JScrollPane, para las dos tablas de carga y cola.
+     *
+     * @param table  tabla
+     * @param scroll scroll donde se ubica la tabla
+     */
+    private void modelDefaultTable(JXTable table, JScrollPane scroll) {
+        table.setModel(new DefaultTableModel(
                 new Object[][]{
                         {null, null, null, null},
                 },
@@ -333,9 +349,15 @@ public class V_Main extends JXFrame implements I_View {
                 return columnEditable[columnIndex];
             }
         });
-        scrollCola.setViewportView(tblCola);
+        scroll.setViewportView(table);
     }
 
+    /**
+     * Método que engloba los elementos del formulario de procesos
+     * para habilitar o deshabilitarlos
+     *
+     * @param enabled true o false
+     */
     public void enabledForm(boolean enabled) {
         txtName.setEnabled(enabled);
         txtArrivalTime.setEnabled(enabled);
@@ -346,10 +368,13 @@ public class V_Main extends JXFrame implements I_View {
         btnFakeData.setEnabled(enabled);
     }
 
-    public void swichtButtons(boolean enabled) {
-        btnIniciar.setEnabled(enabled);
-    }
-
+    /**
+     * Método encargado de asignar el controlador como un Listener de eventos
+     * para los botones y la tabla carga.
+     * Formato:
+     * Establecer un nombre para el comando            setActionCommand([Nombre del comando])
+     * Establecer el controlador que los escuchara     addActionListener([Controlador])
+     */
     @Override
     public void addController() {
         btnAddForm.setActionCommand("ADD_PROCESS");
