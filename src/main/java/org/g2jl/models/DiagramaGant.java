@@ -32,8 +32,6 @@ public class DiagramaGant extends JXPanel {
 
         this.dimensionPanel = getSize();
         this.setPreferredSize(new Dimension(750, 200));
-//        Dimension sizeCanvas = getPreferredSize();
-//        System.out.printf("Constructor: %d - %d\n", sizeCanvas.width, sizeCanvas.height);
 
         this.counter = new BurstCounter();
     }
