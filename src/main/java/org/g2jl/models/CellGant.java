@@ -24,8 +24,6 @@ public class CellGant {
     private final boolean FIRST;
 
     private final Color STROKE_COLOR = Color.BLACK;
-    private final Color BACKGROUND_COLOR = Color.WHITE;
-    private final Color TEXT_COLOR = Color.DARK_GRAY;
 
     /**
      * Constructor de clase
