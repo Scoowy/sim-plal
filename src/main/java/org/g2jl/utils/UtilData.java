@@ -15,6 +15,12 @@ public class UtilData {
     private final static String PROCESS_NAME = "P";
     public final static int BURST = 0;
 
+    /**
+     * Método que genera procesos y los añade tomando en cuenta el constructor de la
+     * clase Process
+     * @param numProcesses
+     * @return
+     */
     public static ArrayList<Process> generateProcesses(int numProcesses) {
         ArrayList<Process> processes = new ArrayList<>();
 

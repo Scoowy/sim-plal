@@ -70,7 +70,9 @@ public class C_Main extends MouseAdapter implements ActionListener {
                 break;
 
             case "TEST_PROCESS":
-                int option = JOptionPane.showOptionDialog(this.view, "Seleccione entre cargar un ejercicio o un numero de procesos aleatorios", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Ejercicio", "Aleatorio"}, "Ejercicio");
+                int option = JOptionPane.showOptionDialog(this.view, "Seleccione entre cargar un ejercicio o un " +
+                        "numero de procesos aleatorios", "Aviso", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null, new String[]{"Ejercicio", "Aleatorio"}, "Ejercicio");
                 if (option == 0) {
                     UtilData.ej1Tbj3(model);
                 } else if (option == 1) {

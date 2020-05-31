@@ -11,5 +11,8 @@ package org.g2jl.models;
  * @version 20.5.29
  */
 public enum StateProcess {
+    /**
+     * Estados de cada proceso
+     */
     PREPARADO, PROCESANDO, ESPERANDO, TERMINADO
 }
