@@ -1,82 +1,82 @@
 package org.g2jl.views;
 
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlContrastIJTheme;
 import net.miginfocom.swing.MigLayout;
 import org.g2jl.controllers.C_Main;
-import org.g2jl.interfaces.I_View;
 import org.g2jl.models.DiagramaGant;
-import org.jdesktop.swingx.*;
+import org.jdesktop.swingx.JXButton;
+import org.jdesktop.swingx.JXFrame;
+import org.jdesktop.swingx.JXLabel;
+import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXTextField;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.awt.Container;
+import java.awt.Dimension;
 
 /**
+ * Vista principal del programa, se usa la librería de MigLayout para la gestión de los componentes en la interfaz.
+ *
  * @author Juan Gahona
  * @version 20.5.30
  */
-public class V_Main extends JXFrame implements I_View {
+public class V_Main extends JXFrame {
 
+    // Declaración de los elementos que contendrá ala venta principal
     private JScrollPane scrollCanvas;
     private DiagramaGant pnlCanvas;
     private JXPanel pnlForm;
     private JXPanel pnlButtons;
 
+    // === Labels ===
     private JXLabel lblName;
     private JXLabel lblArrivalTime;
     private JXLabel lblCpuTime;
     private JXLabel lblPriority;
 
+    // === TextFields de SwingX ===
     private JXTextField txtName;
     private JXTextField txtArrivalTime;
     private JXTextField txtCpuTime;
     private JXTextField txtPriority;
 
+    // === JScrollPanes ===
     private JScrollPane scrollCola;
     private JScrollPane scrollFinal;
     private JScrollPane scrollCarga;
 
+    // === JTables de SwingX ===
     private JXTable tblCola;
     private JXTable tblFinal;
     private JXTable tblCarga;
 
+    // === JButtons de SwingX ===
     private JXButton btnFakeData;
     private JXButton btnAddForm;
     private JXButton btnClearTable;
     private JXButton btnDeleteTable;
     private JXButton btnReset;
-    private JXButton btnPause;
     private JXButton btnIniciar;
 
+    // === Controlador de la venta principal ===
     private C_Main controller;
 
+    // === Timer global encargado de la secuencia de las ráfagas ===
     private Timer tempo;
 
+    /**
+     * Constructor de clase
+     */
     public V_Main() {
-        try {
-            UIManager.setLookAndFeel(new FlatLightOwlContrastIJTheme());
-        } catch (Exception ex) {
-            System.err.println("Fallo al cargar el tema.");
-        }
         initComponents();
         addController();
         txtName.setEditable(false);
-        txtName.setText("P1");
+        txtName.setText("P0");
     }
 
-    public JXButton getBtnPause() {
-        return btnPause;
-    }
-
-    public JXButton getBtnReset() {
-        return btnReset;
-    }
-
-    public JXPanel getPnlButtons() {
-        return pnlButtons;
-    }
-
+    // === Getters y Setters ===
     public JXButton getBtnIniciar() {
         return btnIniciar;
     }
@@ -85,48 +85,16 @@ public class V_Main extends JXFrame implements I_View {
         return pnlCanvas;
     }
 
-    public JScrollPane getScrollCarga() {
-        return scrollCarga;
-    }
-
     public JXTable getTblCarga() {
         return tblCarga;
-    }
-
-    public JScrollPane getScrollCola() {
-        return scrollCola;
     }
 
     public JXTable getTblCola() {
         return tblCola;
     }
 
-    public JScrollPane getScrollFinal() {
-        return scrollFinal;
-    }
-
     public JXTable getTblFinal() {
         return tblFinal;
-    }
-
-    public JXPanel getPnlForm() {
-        return pnlForm;
-    }
-
-    public JXLabel getLblName() {
-        return lblName;
-    }
-
-    public JXLabel getLblArrivalTime() {
-        return lblArrivalTime;
-    }
-
-    public JXLabel getLblCpuTime() {
-        return lblCpuTime;
-    }
-
-    public JXLabel getLblPriority() {
-        return lblPriority;
     }
 
     public JXTextField getTxtName() {
@@ -145,18 +113,6 @@ public class V_Main extends JXFrame implements I_View {
         return txtPriority;
     }
 
-    public JXButton getBtnAddForm() {
-        return btnAddForm;
-    }
-
-    public JXButton getBtnFakeData() {
-        return btnFakeData;
-    }
-
-    public JXButton getBtnClearTable() {
-        return btnClearTable;
-    }
-
     public JXButton getBtnDeleteTable() {
         return btnDeleteTable;
     }
@@ -165,8 +121,11 @@ public class V_Main extends JXFrame implements I_View {
         return tempo;
     }
 
+    /**
+     * Método encargado de inicializar los componentes de la vista
+     */
     private void initComponents() {
-        tempo = new Timer(750, null);
+        tempo = new Timer(750, null); // Cada 750 ms se lanzara un evento
 
         scrollCanvas = new JScrollPane();
         pnlCanvas = new DiagramaGant();
@@ -196,13 +155,12 @@ public class V_Main extends JXFrame implements I_View {
         btnClearTable = new JXButton();
         btnDeleteTable = new JXButton();
         btnReset = new JXButton();
-        btnPause = new JXButton();
         btnIniciar = new JXButton();
 
         //======== this ========
         controller = new C_Main(this);
         pnlCanvas.setBurst(controller.getBurst());
-        setTitle("Ventana principal");
+        setTitle("Sistemas Operativos | Short Job First - No apropiativo");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(1296, 800));
         setResizable(false);
@@ -276,32 +234,7 @@ public class V_Main extends JXFrame implements I_View {
             scrollCola.setBorder(new TitledBorder("Cola"));
 
             //---- tblCola ----
-            tblCola.setModel(new DefaultTableModel(
-                    new Object[][]{
-                            {null, null, null, null},
-                    },
-                    new String[]{
-                            "Proceso", "Tiempo Llegada", "R\u00e1faga CPU", "Prioridad"
-                    }
-            ) {
-                Class<?>[] columnTypes = new Class<?>[]{
-                        String.class, Integer.class, Integer.class, Integer.class
-                };
-                boolean[] columnEditable = new boolean[]{
-                        false, false, false, false
-                };
-
-                @Override
-                public Class<?> getColumnClass(int columnIndex) {
-                    return columnTypes[columnIndex];
-                }
-
-                @Override
-                public boolean isCellEditable(int rowIndex, int columnIndex) {
-                    return columnEditable[columnIndex];
-                }
-            });
-            scrollCola.setViewportView(tblCola);
+            modelDefaultTable(tblCola, scrollCola);
         }
         contentPane.add(scrollCola, "cell 1 0 1 3,width 100%,height 100%");
 
@@ -318,10 +251,10 @@ public class V_Main extends JXFrame implements I_View {
                             "Proceso", "Tiempo Espera", "Tiempo Retorno"
                     }
             ) {
-                Class<?>[] columnTypes = new Class<?>[]{
+                final Class<?>[] columnTypes = new Class<?>[]{
                         String.class, Double.class, Double.class
                 };
-                boolean[] columnEditable = new boolean[]{
+                final boolean[] columnEditable = new boolean[]{
                         false, false, false
                 };
 
@@ -335,6 +268,7 @@ public class V_Main extends JXFrame implements I_View {
                     return columnEditable[columnIndex];
                 }
             });
+            tblFinal.setSortOrder(0, SortOrder.ASCENDING);
             scrollFinal.setViewportView(tblFinal);
         }
         contentPane.add(scrollFinal, "cell 2 0 1 3,width 100%,height 100%");
@@ -346,24 +280,7 @@ public class V_Main extends JXFrame implements I_View {
             scrollCarga.setBorder(new TitledBorder("Carga"));
 
             //---- tblCarga ----
-            tblCarga.setModel(new DefaultTableModel(
-                    new Object[][]{
-                            {null, null, null, null},
-                    },
-                    new String[]{
-                            "Proceso", "Tiempo Llegada", "R\u00e1faga CPU", "Prioridad"
-                    }
-            ) {
-                Class<?>[] columnTypes = new Class<?>[]{
-                        String.class, Integer.class, Integer.class, Integer.class
-                };
-
-                @Override
-                public Class<?> getColumnClass(int columnIndex) {
-                    return columnTypes[columnIndex];
-                }
-            });
-            scrollCarga.setViewportView(tblCarga);
+            modelDefaultTable(tblCarga, scrollCarga);
         }
         contentPane.add(scrollCarga, "cell 0 1,width 100%,height 100%");
 
@@ -388,11 +305,6 @@ public class V_Main extends JXFrame implements I_View {
             btnReset.setText("Reset");
             pnlButtons.add(btnReset, "cell 0 0");
 
-            //---- btnMensaje ----
-            btnPause.setText("Mensaje");
-            btnPause.addActionListener(controller);
-            pnlButtons.add(btnPause, "cell 0 0");
-
             //---- btnIniciar ----
             btnIniciar.setText("Iniciar");
             pnlButtons.add(btnIniciar, "cell 0 0");
@@ -402,7 +314,48 @@ public class V_Main extends JXFrame implements I_View {
         setLocationRelativeTo(null);
     }
 
-    public void enabledForm(boolean enabled){
+    /**
+     * Método que establece un DefaultTableModel y un JScrollPane, para las dos tablas de carga y cola.
+     *
+     * @param table  tabla
+     * @param scroll scroll donde se ubica la tabla
+     */
+    private void modelDefaultTable(JXTable table, JScrollPane scroll) {
+        table.setModel(new DefaultTableModel(
+                new Object[][]{
+                        {null, null, null, null},
+                },
+                new String[]{
+                        "Proceso", "Tiempo Llegada", "R\u00e1faga CPU", "Prioridad"
+                }
+        ) {
+            final Class<?>[] columnTypes = new Class<?>[]{
+                    String.class, Integer.class, Integer.class, Integer.class
+            };
+            final boolean[] columnEditable = new boolean[]{
+                    false, false, false, false
+            };
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnTypes[columnIndex];
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return columnEditable[columnIndex];
+            }
+        });
+        scroll.setViewportView(table);
+    }
+
+    /**
+     * Método que engloba los elementos del formulario de procesos
+     * para habilitar o deshabilitarlos
+     *
+     * @param enabled true o false
+     */
+    public void enabledForm(boolean enabled) {
         txtName.setEnabled(enabled);
         txtArrivalTime.setEnabled(enabled);
         txtCpuTime.setEnabled(enabled);
@@ -412,12 +365,13 @@ public class V_Main extends JXFrame implements I_View {
         btnFakeData.setEnabled(enabled);
     }
 
-    public void swichtButtons(boolean enabled) {
-        btnIniciar.setEnabled(enabled);
-        btnPause.setEnabled(!enabled);
-    }
-
-    @Override
+    /**
+     * Método encargado de asignar el controlador como un Listener de eventos
+     * para los botones y la tabla carga.
+     * Formato:
+     * Establecer un nombre para el comando            setActionCommand([Nombre del comando])
+     * Establecer el controlador que los escuchara     addActionListener([Controlador])
+     */
     public void addController() {
         btnAddForm.setActionCommand("ADD_PROCESS");
         btnAddForm.addActionListener(controller);
@@ -430,9 +384,6 @@ public class V_Main extends JXFrame implements I_View {
 
         btnDeleteTable.setActionCommand("DELETE_PROCESS");
         btnDeleteTable.addActionListener(controller);
-
-        btnPause.setActionCommand("PAUSE_SIMULATION");
-        btnPause.addActionListener(controller);
 
         btnIniciar.setActionCommand("PLAY_SIMULATION");
         btnIniciar.addActionListener(controller);
