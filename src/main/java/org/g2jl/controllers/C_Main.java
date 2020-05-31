@@ -1,13 +1,15 @@
 package org.g2jl.controllers;
 
-import org.g2jl.interfaces.I_Controller;
 import org.g2jl.models.M_Main;
 import org.g2jl.models.Process;
+import org.g2jl.utils.UtilData;
 import org.g2jl.views.V_Main;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Juan Gahona
  * @version 20.5.30
  */
-public class C_Main extends MouseAdapter implements I_Controller {
+public class C_Main extends MouseAdapter implements ActionListener {
     private final V_Main view;
     private M_Main model;
 
@@ -49,8 +51,7 @@ public class C_Main extends MouseAdapter implements I_Controller {
                 } else {
                     if (view.getTempo().isRunning()) {
                         model.showMessage("Simulación terminada");
-                        view.enabledForm(false);
-                        view.getBtnIniciar().setEnabled(false);
+                        model.presentResults();
                     }
                     pauseTimer();
                 }
@@ -69,11 +70,12 @@ public class C_Main extends MouseAdapter implements I_Controller {
                 break;
 
             case "TEST_PROCESS":
-                model.addNewProcess("P1", 2, 3, 3);
-                model.addNewProcess("P2", 3, 4, 2);
-                model.addNewProcess("P3", 5, 2, 1);
-                model.addNewProcess("P4", 0, 5, 2);
-                model.addNewProcess("P5", 4, 6, 4);
+                int option = JOptionPane.showOptionDialog(this.view, "Seleccione entre cargar un ejercicio o un numero de procesos aleatorios", "Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Ejercicio", "Aleatorio"}, "Ejercicio");
+                if (option == 0) {
+                    UtilData.ej1Tbj3(model);
+                } else if (option == 1) {
+                    UtilData.randomProcess(model);
+                }
                 updateTablesModel("CARGA");
                 clearForm();
                 break;
@@ -96,6 +98,7 @@ public class C_Main extends MouseAdapter implements I_Controller {
                 if (model.haveProcess()) {
                     view.getBtnIniciar().setEnabled(false);
                     view.enabledForm(false);
+                    model.setProcessesCargaCopy(model.getProcesses_carga());
                     playTimer();
                 } else {
                     model.showMessage("Ingrese mínimo un proceso");
@@ -163,6 +166,14 @@ public class C_Main extends MouseAdapter implements I_Controller {
                 clearTable(tableModel);
                 for (Process process : model.getProcesses_final()) {
                     Object[] row = new Object[]{process.getName(), process.getWaitTime(), process.getReturnTime()};
+                    tableModel.addRow(row);
+                }
+                break;
+            case "RESULTADOS":
+                tableModel = (DefaultTableModel) view.getTblCarga().getModel();
+                clearTable(tableModel);
+                for (Process process : model.getProcessesCargaCopy()) {
+                    Object[] row = new Object[]{process.getName(), process.getArrivalTime(), process.getCpuTime(), process.getPriority()};
                     tableModel.addRow(row);
                 }
                 break;

@@ -18,8 +18,6 @@ public class BurstCounter {
 
     /**
      * Constructor de clase.
-     *
-     * @param burst ráfaga de CPU actual
      */
     public BurstCounter() {
         this.topLeft = new Point(0, 0);
@@ -47,7 +45,10 @@ public class BurstCounter {
 
         g.setFont(UtilGraphics.FONT_COUNTER);
         g.setColor(UtilGraphics.TEXT_COLOR);
-        Point posText = UtilGraphics.alignText(g, topLeft, bottomRight, burst.get(), UtilGraphics.TEXT_CENTER);
-        g.drawString(Integer.toString(burst.get()), posText.x, posText.y);
+
+        int burstFix = Math.max(burst.get() - 1, 0);
+
+        Point posText = UtilGraphics.alignText(g, topLeft, bottomRight, burstFix, UtilGraphics.TEXT_CENTER);
+        g.drawString(Integer.toString(burstFix), posText.x, posText.y);
     }
 }

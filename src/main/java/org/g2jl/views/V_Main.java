@@ -2,7 +2,6 @@ package org.g2jl.views;
 
 import net.miginfocom.swing.MigLayout;
 import org.g2jl.controllers.C_Main;
-import org.g2jl.interfaces.I_View;
 import org.g2jl.models.DiagramaGant;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
@@ -11,10 +10,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTextField;
 
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.Timer;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Container;
@@ -26,7 +22,7 @@ import java.awt.Dimension;
  * @author Juan Gahona
  * @version 20.5.30
  */
-public class V_Main extends JXFrame implements I_View {
+public class V_Main extends JXFrame {
 
     // Declaración de los elementos que contendrá ala venta principal
     private JScrollPane scrollCanvas;
@@ -164,7 +160,7 @@ public class V_Main extends JXFrame implements I_View {
         //======== this ========
         controller = new C_Main(this);
         pnlCanvas.setBurst(controller.getBurst());
-        setTitle("Sistemas Operativos | Short Job First");
+        setTitle("Sistemas Operativos | Short Job First - No apropiativo");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(1296, 800));
         setResizable(false);
@@ -272,6 +268,7 @@ public class V_Main extends JXFrame implements I_View {
                     return columnEditable[columnIndex];
                 }
             });
+            tblFinal.setSortOrder(0, SortOrder.ASCENDING);
             scrollFinal.setViewportView(tblFinal);
         }
         contentPane.add(scrollFinal, "cell 2 0 1 3,width 100%,height 100%");
@@ -375,7 +372,6 @@ public class V_Main extends JXFrame implements I_View {
      * Establecer un nombre para el comando            setActionCommand([Nombre del comando])
      * Establecer el controlador que los escuchara     addActionListener([Controlador])
      */
-    @Override
     public void addController() {
         btnAddForm.setActionCommand("ADD_PROCESS");
         btnAddForm.addActionListener(controller);
