@@ -6,10 +6,10 @@ import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Clase que pinta un cuadro con el contador de ráfagas de CPU actuales2.
+ * Clase que pinta un cuadro con el contador de ráfagas de CPU actuales.
  *
  * @author Juan Gahona
- * @version 20.5.30
+ * @version 20.5.31
  */
 
 public class BurstCounter {
@@ -30,17 +30,19 @@ public class BurstCounter {
     }
 
     /**
-     * damos valores para ráfagas
-     * @param burst
+     * Damos valores para ráfagas
+     *
+     * @param burst AtomicInteger
      */
     public void setBurst(AtomicInteger burst) {
         this.burst = burst;
     }
 
     /**
-     * calculamos la posición otorgando un punto extremo para luego evaluarlo con cada uno de
-     * los ejes X y Y tanto con el alto como del ancho
-     * @param extremePoint
+     * Calculamos la posición de dibujado del contador otorgando un punto extremo para luego
+     * evaluarlo con cada uno de los ejes X y Y tanto con el alto como del ancho
+     *
+     * @param extremePoint Dimension del extremo derecho inferior del counter
      */
     public void calculatePosition(Dimension extremePoint) {
         topLeft.x = extremePoint.width - bottomRight.x;
@@ -48,8 +50,9 @@ public class BurstCounter {
     }
 
     /**
-     * método para pintar cuadro de contador de ráfagas del CPU
-     * @param g
+     * Método para pintar cuadro de contador de ráfagas del CPU
+     *
+     * @param g Contexto gráfico
      */
     public void paintCounter(Graphics g) {
         g.setColor(UtilGraphics.BACKGROUND_COLOR_COUNTER);
