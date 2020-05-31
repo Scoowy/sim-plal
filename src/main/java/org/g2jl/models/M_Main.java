@@ -4,6 +4,7 @@ import org.g2jl.controllers.C_Main;
 import org.g2jl.utils.UtilData;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,6 +20,8 @@ public class M_Main {
     private ArrayList<Process> processes_carga;
     private ArrayList<Process> processes_cola;
     private ArrayList<Process> processes_final;
+
+    private ArrayList<Process> processesCargaCopy;
 
     private int idProcess;
 
@@ -46,6 +49,14 @@ public class M_Main {
 
     public void setIdProcess(int idProcess) {
         this.idProcess = idProcess;
+    }
+
+    public ArrayList<Process> getProcessesCargaCopy() {
+        return this.processesCargaCopy;
+    }
+
+    public void setProcessesCargaCopy(ArrayList<Process> processesC) {
+        this.processesCargaCopy = (ArrayList<Process>) processesC.clone();
     }
 
     public void validateAndAddProcess(String nombre, String arrivalTime, String cpuBurst, String priority) {
@@ -127,7 +138,7 @@ public class M_Main {
         controller.updateTablesModel("FINAL");
     }
 
-    public double[] calulateAverages() {
+    public double[] calculateAverages() {
         double[] totales = new double[2];
         for (Process process : processes_final) {
             totales[0] += process.getWaitTime();
@@ -139,7 +150,7 @@ public class M_Main {
         return totales;
     }
 
-    public void ordenarCola() {
+    public void sortSJF() {
         processes_cola.sort(Process::compareTo);
     }
 
@@ -176,7 +187,7 @@ public class M_Main {
         // Movemos los procesos de carga a cola según el burst
         if (moveProcessesCargaToCola()) {
             // Si hubo elementos movidos se reordena la lista.
-            ordenarCola();
+            sortSJF();
         }
 
         // Comprobamos si no existen mas procesos en carga
@@ -186,7 +197,7 @@ public class M_Main {
         Process procRunning = haveProcessRunning();
         // Comprobamos si existe un proceso
         if (procRunning != null) {
-            // Procesamos unicamente un burst de este proceso
+            // Procesamos únicamente un burst de este proceso
             processBurst(procRunning.getId());
             // Si encuentra procesos terminados los mueve de lista
             if (moveTerminatedProcess()) {
@@ -194,12 +205,11 @@ public class M_Main {
                 // Busca el siguiente de existir
                 procRunning = nextProcessRunning();
             }
-            controller.getView().getPnlCanvas().processListToCellList(processes_final, procRunning);
         } else {
             // Busca el siguiente de existir
             procRunning = nextProcessRunning();
-            controller.getView().getPnlCanvas().processListToCellList(processes_final, procRunning);
         }
+        controller.getView().getPnlCanvas().processListToCellList(processes_final, procRunning);
         controller.getView().getPnlCanvas().repaint();
     }
 
@@ -230,16 +240,6 @@ public class M_Main {
         JOptionPane.showMessageDialog(controller.getView(), message, "Aviso", JOptionPane.ERROR_MESSAGE);
     }
 
-    public void resetValues() {
-        processes_carga = new ArrayList<>();
-        processes_cola = new ArrayList<>();
-        processes_final = new ArrayList<>();
-
-        idProcess = 1;
-
-        burst = new AtomicInteger(0);
-    }
-
     public ArrayList<Process> getProcesses_carga() {
         return processes_carga;
     }
@@ -262,5 +262,14 @@ public class M_Main {
 
     public void addBurst() {
         burst.incrementAndGet();
+    }
+
+    public void presentResults() {
+        DefaultTableModel tModel = (DefaultTableModel) controller.getView().getTblFinal().getModel();
+        double[] totales = calculateAverages();
+        Object[] row = new Object[]{"TOTALES", totales[0], totales[1]};
+        tModel.addRow(row);
+
+        controller.updateTablesModel("RESULTADOS");
     }
 }
