@@ -1,7 +1,6 @@
 package org.g2jl.controllers;
 
 import org.g2jl.interfaces.I_Controller;
-import org.g2jl.models.DiagramaGant;
 import org.g2jl.models.M_Main;
 import org.g2jl.models.Process;
 import org.g2jl.views.V_Main;
@@ -95,7 +94,7 @@ public class C_Main extends MouseAdapter implements I_Controller {
 
             case "PLAY_SIMULATION":
                 if (model.haveProcess()) {
-                    view.swichtButtons(false);
+                    view.getBtnIniciar().setEnabled(false);
                     view.enabledForm(false);
                     playTimer();
                 } else {
@@ -111,7 +110,7 @@ public class C_Main extends MouseAdapter implements I_Controller {
                 updateTablesModel("ALL");
                 view.enabledForm(true);
                 view.getTxtName().setText("P1");
-                view.swichtButtons(true);
+                view.getBtnIniciar().setEnabled(true);
                 break;
 
             default:
