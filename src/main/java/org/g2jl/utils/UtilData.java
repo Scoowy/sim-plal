@@ -9,17 +9,17 @@ import org.g2jl.models.Process;
  * Clase generadora de datos de prueba.
  *
  * @author Juan Gahona
- * @version 20.5.30
+ * @version 20.5.31
  */
 public class UtilData {
     private final static String PROCESS_NAME = "P";
-    public final static int BURST = 0;
 
     /**
      * Método que genera procesos y los añade tomando en cuenta el constructor de la
      * clase Process
-     * @param numProcesses
-     * @return
+     *
+     * @param numProcesses numero de procesos
+     * @return Una lista de n Procesos
      */
     public static ArrayList<Process> generateProcesses(int numProcesses) {
         ArrayList<Process> processes = new ArrayList<>();

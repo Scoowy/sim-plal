@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Clase heredada de un JXFrame en la que se dibujara el diagrama de Gant.
  *
  * @author Juan Gahona
- * @version 20.5.30
+ * @version 20.5.31
  * @see "https://stackoverflow.com/a/37460185/230513"
  */
 public class DiagramaGant extends JXPanel {
@@ -32,8 +32,6 @@ public class DiagramaGant extends JXPanel {
 
         this.dimensionPanel = getSize();
         this.setPreferredSize(new Dimension(750, 200));
-//        Dimension sizeCanvas = getPreferredSize();
-//        System.out.printf("Constructor: %d - %d\n", sizeCanvas.width, sizeCanvas.height);
 
         this.counter = new BurstCounter();
     }

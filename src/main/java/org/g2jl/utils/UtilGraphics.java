@@ -1,12 +1,17 @@
 package org.g2jl.utils;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Point;
 
 /**
  * Clase que contiene métodos y variables estáticas para trabajar con elementos gráficos.
  *
  * @author Juan Gahona
- * @version 20.5.29
+ * @version 20.5.31
  */
 public class UtilGraphics {
     public final static Color STROKE_COLOR = Color.BLACK;
@@ -126,10 +131,9 @@ public class UtilGraphics {
     public static Point calcCellSize(int numProcesses, Dimension panel) {
         Dimension cellSize = new Dimension(MAX_SIZE_CELL);
         cellSize.width = panel.width / numProcesses;
-        System.out.printf("%d - %d\n", cellSize.width, MIN_SIZE_CELL.width);
+
         // cellSize.width tendrá el valor mínimo de la celda si es inferior a este.
         cellSize.width = Math.max(cellSize.width, MIN_SIZE_CELL.width);
-        System.out.printf("%d\n", cellSize.width);
 
         if (numProcesses > MIN_NUM_CELLS_ROW) {
             cellSize.width = panel.width / 10;
