@@ -19,6 +19,10 @@ import javax.swing.UIManager;
  * @author Luisa Bermeo
  * @version 20.5.30
  */
+
+/**
+ * Ejecución del programa
+ */
 public class SimPlAl {
     public static void main(String[] args) {
         // Se carga por defecto un tema para toda la interfaz de swing si es posible
